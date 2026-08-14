@@ -1,0 +1,17 @@
+﻿[2026-08-14 08:45:06] ===== Bond Panel daily update started =====
+[2026-08-14 08:45:06] [1/4] Generating data (data_exporter.py)...
+[2026-08-14 08:47:04]       Data generated
+[2026-08-14 08:47:04] [1.5] Snapshot size: 53.8 KB
+[2026-08-14 08:47:04] [ERROR] Snapshot too small (55121 bytes), iFinD fetch may have failed. NOT pushing to avoid bad data.
+[2026-08-14 08:54:49] ===== Bond Panel daily update started =====
+[2026-08-14 08:54:49] [1/4] Generating data (data_exporter.py)...
+[2026-08-14 08:56:29]       Data generated
+[2026-08-14 08:56:29] [1.5] Snapshot size: 1268.8 KB
+[2026-08-14 08:56:29]       Validation passed
+[2026-08-14 08:56:29] [2/4] Copying files to deploy...
+[2026-08-14 08:56:29]       Copied: echarts.min.js
+[2026-08-14 08:56:29]       Copied: bond_snapshot.json
+[2026-08-14 08:56:29]       Copied: bond_history.json
+[2026-08-14 08:56:29]       Copied: bond_data.json
+[2026-08-14 08:56:29]       Copied: index.html
+[2026-08-14 08:56:29] [3/4] Git commit...
