@@ -353,6 +353,10 @@ function loadData() {
             document.getElementById('spread-start').value = raw.dates[0];
             document.getElementById('spread-end').value = raw.dates[raw.dates.length - 1];
           }
+          // 记录最新一行，供热力图tooltip显示当前利差
+          if (raw && raw.data && raw.data.length > 0) {
+            window._spreadLatestRow = raw.data[raw.data.length - 1];
+          }
         })
         .catch(function(e) {
           console.warn('历史数据加载失败（利差分位数页不可用）:', e);
@@ -1402,8 +1406,27 @@ function renderSpreadHeatmap() {
       formatter: function(p) {
         var x = xLabels[p.data[0]];
         var y = yLabels[p.data[1]];
-        return '<b>' + (y || '') + '</b> vs <b>' + (x || '') + '</b>' +
-               '<br/>分位数: <b style="color:#fac775">' + p.data[2] + '%</b>';
+        var html = '<b>' + (y || '') + '</b> vs <b>' + (x || '') + '</b>';
+        // 尝试显示当前利差（纵轴收益率 - 横轴收益率）
+        try {
+          var last = window._spreadLatestRow;  // 优先用筛选区间内最新行
+          if (last == null) {
+            var raw = BOND_DATA.spread_percentiles.raw_data;
+            if (raw && raw.data && raw.data.length > 0) last = raw.data[raw.data.length - 1];
+          }
+          if (last) {
+            var i = p.data[0];   // x 索引（columns顺序与x_labels一致）
+            var j = p.data[1];   // y 索引
+            if (last[i] != null && last[j] != null) {
+              var spread = (last[j] - last[i]) * 100;  // 转换为 bp
+              var sign = spread > 0 ? '+' : '';
+              html += '<br/>利差(' + (y || '') + '-' + (x || '') + '): <b style="color:#7ec8ff">' +
+                      sign + spread.toFixed(1) + ' bp</b>';
+            }
+          }
+        } catch (e) { /* raw_data 不可用时忽略 */ }
+        html += '<br/>分位数: <b style="color:#fac775">' + p.data[2] + '%</b>';
+        return html;
       }
     },
     grid: { left: 110, right: 140, top: 16, bottom: 20 },
@@ -1416,8 +1439,11 @@ function renderSpreadHeatmap() {
       right: 2,
       top: 'center',
       itemWidth: 18, itemHeight: 240,
-      inRange: { color: ['#1d9e75', '#f5f4f0', '#fac775', '#d85a30', '#c23531'] },
-      text: ['贵', '便宜'],
+      // 颜色从 min→max 映射：分位数小=贵(红)，分位数大=便宜(绿)
+      // （矩阵值 = 纵轴-横轴利差分位数，分位数越大说明纵轴相对横轴越便宜）
+      inRange: { color: ['#c23531', '#d85a30', '#fac775', '#f5f4f0', '#1d9e75'] },
+      // text[0]=最大值端(便宜)，text[1]=最小值端(贵)
+      text: ['便宜', '贵'],
       textGap: 8,
       textStyle: { fontSize: 12 }
     },
@@ -1511,6 +1537,7 @@ function recalcSpread() {
   var cols = raw.columns;
   var subData = raw.data.slice(startIdx, endIdx + 1);
   var latestRow = subData[subData.length - 1];
+  window._spreadLatestRow = latestRow;   // 供tooltip显示当前利差
 
   // 计算某列值在子数据中的分位数
   function calcPercentile(vals, value) {
@@ -1574,7 +1601,6 @@ function recalcSpread() {
 
   // 更新排名表（8列，与初始渲染一致）
   var tbody = document.querySelector('#rank-table-body tbody');
-  console.log('recalcSpread tbody:', tbody, 'rankItems:', rankItems.length);
   if (tbody) {
     var html = '';
     rankItems.forEach(function(r, i) {
@@ -1589,9 +1615,9 @@ function recalcSpread() {
         '</tr>';
     });
     tbody.innerHTML = html;
-    console.log('排名表已更新');
+    console.log('[rank] 已更新 ' + rankItems.length + ' 行，第一行:', rankItems.length ? (rankItems[0].name + ' ratio=' + rankItems[0].ratio_ge50) : 'N/A');
   } else {
-    console.log('tbody 未找到!');
+    console.log('[rank] tbody 未找到!');
   }
 
   // 重建 quantile_matrix 热力图
@@ -1616,7 +1642,7 @@ function recalcSpread() {
         name: '分位数',
         type: 'heatmap',
         data: matrixData,
-        label: { show: true, fontSize: 9 },
+        label: { show: false },
         emphasis: { itemStyle: { shadowBlur: 10 } }
       }]
     });
