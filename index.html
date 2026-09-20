@@ -1385,7 +1385,25 @@ function renderCarryChart() {
 }
 
 // ==================== 利差分位数热力图 ====================
-function renderSpreadHeatmap() {
+// 矩阵约定（与 Python 端 calc_spread_quantile_matrix 一致）：
+//   只填「行索引 < 列索引」的一半，值为 行 - 列 的利差分位数
+//   ECharts heatmap 数据项 = [x索引=列, y索引=行, 值]，y 轴自下而上递增
+//   → 视觉上只显示下三角；日期筛选重算时同样只填这一半，直接覆盖原始格子
+function _spreadAxisLabels(cols) {
+  var sp = BOND_DATA && BOND_DATA.spread_percentiles;
+  var qm = sp && sp.quantile_matrix;
+  if (qm && qm.x_labels && qm.y_labels) {
+    if (!cols || qm.x_labels.length === cols.length) return { x: qm.x_labels, y: qm.y_labels };
+  }
+  if (cols) {
+    var l = cols.map(function(c) { return String(c).replace(/_/g, ' '); });
+    return { x: l, y: l };
+  }
+  return { x: (qm && qm.x_labels) || [], y: (qm && qm.y_labels) || [] };
+}
+
+// overrideData: 传入则用它渲染（日期筛选重算后的矩阵），否则用原始数据
+function renderSpreadHeatmap(overrideData) {
   if (!BOND_DATA) return;
   var qm = BOND_DATA.spread_percentiles.quantile_matrix;
   if (!qm || !qm.data) return;
@@ -1394,9 +1412,11 @@ function renderSpreadHeatmap() {
   if (!window._chartHeatmap) window._chartHeatmap = echarts.init(dom);
   var chart = window._chartHeatmap;
 
-  var rawData = qm.data;
-  var xLabels = qm.x_labels;
-  var yLabels = qm.y_labels;
+  var rawData = overrideData || qm.data;
+  var rawRd = BOND_DATA.spread_percentiles.raw_data;
+  var lab = _spreadAxisLabels(rawRd && rawRd.columns);
+  var xLabels = lab.x;
+  var yLabels = lab.y;
 
   chart.setOption({
     tooltip: {
@@ -1621,32 +1641,21 @@ function recalcSpread() {
   }
 
   // 重建 quantile_matrix 热力图
+  // 只填「行索引 < 列索引」的一半（视觉下三角），与 Python 端原始矩阵一致，
+  // 使筛选结果直接覆盖原始格子，而不是在上三角另画一张
   var matrixData = [];
-  for (var i = 0; i < cols.length; i++) {
-    for (var j = 0; j < cols.length; j++) {
-      if (i === j) continue;
-      var spread = latestRow[i] - latestRow[j];
+  for (var ii = 0; ii < cols.length; ii++) {
+    for (var jj = ii + 1; jj < cols.length; jj++) {
+      var spread = latestRow[ii] - latestRow[jj];
       var spreadVals = [];
-      for (var k = 0; k < subData.length; k++) {
-        var a = subData[k][i], b = subData[k][j];
+      for (var kk = 0; kk < subData.length; kk++) {
+        var a = subData[kk][ii], b = subData[kk][jj];
         if (a != null && b != null) spreadVals.push(a - b);
       }
-      var pct2 = calcPercentile(spreadVals, spread);
-      matrixData.push([j, i, pct2]);
+      matrixData.push([jj, ii, calcPercentile(spreadVals, spread)]);
     }
   }
-
-  if (window._chartHeatmap) {
-    window._chartHeatmap.setOption({
-      series: [{
-        name: '分位数',
-        type: 'heatmap',
-        data: matrixData,
-        label: { show: false },
-        emphasis: { itemStyle: { shadowBlur: 10 } }
-      }]
-    });
-  }
+  renderSpreadHeatmap(matrixData);
 }
 
 // ==================== 优化求解 ====================
