@@ -803,3 +803,18 @@ At D:\固收量化\web_panel\deploy\update_github.ps1:51 char:19
 [2026-09-20 08:45:47]       Copied: bond_data.json
 [2026-09-20 08:45:47]       Copied: index.html
 [2026-09-20 08:45:47] [3/4] Git commit...
+[2026-09-20 08:45:48]       Committed
+[2026-09-20 08:45:48] [4/4] Pushing to GitHub Pages...
+[2026-09-20 08:45:51]       Commits ahead of origin/main: 1
+[2026-09-20 08:45:51]       Push attempt 1/5...
+[2026-09-20 08:46:12]       Push failed (exit 128): git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Failed to connect to github.com:443 
+after 21111 ms: Could not connect to server
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...nnect to server:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-09-20 08:46:12]       Retrying in 30 seconds...
+[2026-09-20 08:46:42]       Push attempt 2/5...
+[2026-09-20 08:46:48]       Pushed and verified (remote HEAD = 1dc3c5511347b962a6b36580ba8041cc1d012d17)
+[2026-09-20 08:46:48] ===== Daily update finished =====
