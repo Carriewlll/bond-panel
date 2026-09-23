@@ -868,3 +868,37 @@ after 21111 ms: Could not connect to server
 [2026-09-22 08:47:14]       Copied: bond_data.json
 [2026-09-22 08:47:14]       Copied: index.html
 [2026-09-22 08:47:14] [3/4] Git commit...
+[2026-09-22 08:47:16]       Committed
+[2026-09-22 08:47:16] [4/4] Pushing to GitHub Pages...
+[2026-09-22 08:47:19]       Commits ahead of origin/main: 1
+[2026-09-22 08:47:19]       Push attempt 1/5...
+[2026-09-22 08:47:25]       Pushed and verified (remote HEAD = aa10b073b791afe05d772b57fa6a8fc900efae7c)
+[2026-09-22 08:47:25] ===== Daily update finished =====
+[2026-09-22 12:00:04] ===== Bond Panel daily update started (retry-only mode) =====
+[2026-09-22 12:00:04] [1/4] Skipped (retry-only mode).
+[2026-09-22 12:00:04] [2/4] Skipped (retry-only mode).
+[2026-09-22 12:00:04] [3/4] Skipped (retry-only mode).
+[2026-09-22 12:00:04] [4/4] Pushing to GitHub Pages...
+[2026-09-22 12:00:30]       [WARN] fetch failed (offline?): git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Recv failure: Connection was reset
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...ction was reset:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-09-22 12:00:32]       Commits ahead of origin/main: 0
+[2026-09-22 12:00:32]       Remote is already up to date. Nothing to push.
+[2026-09-22 12:00:32] ===== Daily update finished =====
+[2026-09-23 08:45:04] ===== Bond Panel daily update started  =====
+[2026-09-23 08:45:04] [1/4] Generating data (with retry)...
+[2026-09-23 08:45:04]       Data attempt 1/2...
+[2026-09-23 08:45:04]       Running data_exporter.py...
+[2026-09-23 08:46:55]       Snapshot size: 1306.3 KB
+[2026-09-23 08:46:55]       Validation passed
+[2026-09-23 08:46:55]       Data OK
+[2026-09-23 08:46:55] [2/4] Copying files to deploy...
+[2026-09-23 08:46:55]       Copied: echarts.min.js
+[2026-09-23 08:46:55]       Copied: bond_snapshot.json
+[2026-09-23 08:46:55]       Copied: bond_history.json
+[2026-09-23 08:46:55]       Copied: bond_data.json
+[2026-09-23 08:46:55]       Copied: index.html
+[2026-09-23 08:46:55] [3/4] Git commit...
