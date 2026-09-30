@@ -89,6 +89,19 @@ label.toggle input{margin:0}
 .cmp-sortable.sort-asc .cmp-arrow::after{content:"▲";color:var(--accent)}
 .cmp-sortable.sort-desc .cmp-arrow::after{content:"▼";color:var(--accent)}
 
+/* 库存券名单 */
+.stock-panel{margin-top:10px;font-size:12px;color:var(--text2)}
+.stock-panel .sp-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.stock-panel .sp-legend{display:inline-flex;align-items:center;gap:4px}
+.stock-panel .sp-legend .ring{width:11px;height:11px;border-radius:50%;background:#f0a030;border:2px solid #2f7fd1;box-sizing:border-box}
+.stock-list{display:flex;gap:6px;flex-wrap:wrap}
+.stock-item{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border:1px solid var(--border);border-left:3px solid #2f7fd1;border-radius:12px;background:#f9f8f5}
+.stock-item .si-code{font-weight:600;color:var(--text);font-size:12px}
+.stock-item .si-meta{color:var(--text2);font-size:11px}
+.stock-item .si-del{border:none;background:none;color:var(--text2);cursor:pointer;font-size:14px;line-height:1;padding:0 2px}
+.stock-item .si-del:hover{color:#a32d2d}
+.stock-empty{color:var(--text2);font-size:12px}
+
 @media (max-width:800px){.split,.split-3{grid-template-columns:1fr}}
 </style>
 </head>
@@ -145,9 +158,14 @@ label.toggle input{margin:0}
             <option value="差">差</option>
           </select>
           <button id="btn-reset-filter" onclick="resetFilter()" style="display:none;font-size:12px">重置</button>
+          <span style="color:var(--text2);font-size:12px;margin-left:8px">库存券:</span>
+          <input type="text" id="stock-add-code" placeholder="如 240011.IB" style="width:110px;font-size:12px" onkeydown="if(event.key==='Enter')addStockCode()">
+          <button onclick="addStockCode()" style="font-size:12px">添加</button>
+          <button onclick="clearStockCodes()" style="font-size:12px">清空</button>
         </div>
       </div>
       <div id="chart-yield" class="chart"></div>
+      <div id="stock-panel" class="stock-panel"></div>
     </div>
 
     <div class="card" id="carry-card">
@@ -332,6 +350,7 @@ function loadData() {
 
       // 快照就绪 → 立即渲染收益率曲线页
       buildCodeDict();
+      _loadStockCodes();
       initCompare();
       renderYieldCurve();
       renderCarryChart();
@@ -402,6 +421,7 @@ function initAll() {
     }
   }
   buildCodeDict();
+  _loadStockCodes();
   renderYieldCurve();
   renderCarryChart();
   renderSpreadHeatmap();
@@ -1037,6 +1057,133 @@ function resetFilter() {
   renderYieldCurve();
 }
 
+// ==================== 库存券名单（localStorage 持久化） ====================
+var STOCK_STORAGE_KEY = 'bond_panel_stock_codes';
+window._stockCodes = [];
+
+function _loadStockCodes() {
+  var stored = null;
+  try {
+    stored = JSON.parse(localStorage.getItem(STOCK_STORAGE_KEY) || 'null');
+  } catch (e) { stored = null; }
+  window._stockCodes = Array.isArray(stored)
+    ? stored.map(function(c) { return String(c).trim().toUpperCase(); })
+    : [];
+}
+
+function _saveStockCodes() {
+  try { localStorage.setItem(STOCK_STORAGE_KEY, JSON.stringify(window._stockCodes)); }
+  catch (e) { /* 存储不可用则忽略 */ }
+}
+
+function addStockCode() {
+  var input = document.getElementById('stock-add-code');
+  var code = (input.value || '').trim().toUpperCase();
+  if (!code) return;
+  var b = findBond(code);
+  if (!b) { alert('未找到该个券代码，请检查：' + code); return; }
+  if (window._stockCodes.indexOf(code) === -1) window._stockCodes.push(code);
+  input.value = '';
+  _saveStockCodes();
+  renderYieldCurve();
+  // 跨品种时给出提示，避免"加了却看不到"
+  var curType = document.getElementById('yc-bond-type').value;
+  if (b._bt && b._bt !== curType) {
+    alert('已添加：' + code + '（属于' + b._bt + '）。当前页面为' + curType + '，该券在本页不显示。');
+  }
+}
+
+function removeStockCode(code) {
+  window._stockCodes = window._stockCodes.filter(function(c) { return c !== code; });
+  _saveStockCodes();
+  renderYieldCurve();
+}
+
+function clearStockCodes() {
+  if (window._stockCodes.length && !confirm('清空全部库存券名单？')) return;
+  window._stockCodes = [];
+  _saveStockCodes();
+  renderYieldCurve();
+}
+
+// 当前筛选条件下保留的个券（曲线页与库存名单共用同一口径）
+function getFilteredBonds(bonds) {
+  var minTerm = parseFloat(document.getElementById('term-filter-min').value) || 0;
+  var maxTerm = parseFloat(document.getElementById('term-filter-max').value) || Infinity;
+  var filterVat = document.getElementById('filter-vat').checked;
+  var filterNonVat = document.getElementById('filter-non-vat').checked;
+  var filterType = document.getElementById('filter-bond-type').value;
+  var filterRegion = document.getElementById('filter-region').value;
+  var hasFilter = (minTerm > 0 || maxTerm < Infinity || filterVat || filterNonVat || filterType || filterRegion);
+
+  var out = (bonds || []).slice();
+  if (!hasFilter) return out;
+
+  out = out.filter(function(b) {
+    if (b.term < minTerm || b.term > maxTerm) return false;
+    var isFree = (b.vat_free === 0 || b.vat_free == null);   // 0=免税
+    if (filterVat && !filterNonVat && !isFree) return false; // 只勾免税 → 剔除不免税
+    if (!filterVat && filterNonVat && isFree) return false;  // 只勾不免税 → 剔除免税
+    if (filterType && b.bond_type != null && b.bond_type !== filterType) return false;
+    if (filterRegion && b.region != null && b.region !== filterRegion) return false;
+    return true;
+  });
+  // 免、不免税都勾选：不免税券用 估值/1.03 参与拟合
+  if (filterVat && filterNonVat) {
+    out = out.map(function(b) {
+      var isFree = (b.vat_free === 0 || b.vat_free == null);
+      if (!isFree && b.yield != null) {
+        return { code: b.code, term: b.term, yield: b.yield / 1.03, vat_free: b.vat_free, deviation: b.deviation };
+      }
+      return b;
+    });
+  }
+  return out;
+}
+
+// 库存名单面板：只展示「当前品种 + 通过当前筛选」的库存券
+function renderStockPanel() {
+  var box = document.getElementById('stock-panel');
+  if (!box || !BOND_DATA) return;
+  var bondType = document.getElementById('yc-bond-type').value;
+  var data = BOND_DATA.yield_curves && BOND_DATA.yield_curves[bondType];
+  var kept = getFilteredBonds(data ? data.bonds : []);
+
+  var keptMap = {};
+  kept.forEach(function(b) { if (b.code) keptMap[String(b.code).toUpperCase()] = b; });
+
+  var shown = [];
+  window._stockCodes.forEach(function(c) { if (keptMap[c]) shown.push(keptMap[c]); });
+  var hidden = window._stockCodes.length - shown.length;
+
+  var html = '<div class="sp-title">' +
+    '<span>库存券 <b style="color:var(--text)">' + shown.length + '</b> 只' +
+      (hidden > 0 ? '（另有 ' + hidden + ' 只不在当前品种或筛选范围内，已隐藏）' : '') +
+    '</span>' +
+    '<span class="sp-legend"><span class="ring"></span>蓝边 = 库存券（图中仅标注当前筛选内的点）</span>' +
+    '</div>';
+
+  if (window._stockCodes.length === 0) {
+    html += '<div class="stock-empty">尚未添加库存券：输入代码后回车或点“添加”。名单保存在本机浏览器，刷新后保留。</div>';
+  } else if (shown.length === 0) {
+    html += '<div class="stock-empty">名单中的 ' + window._stockCodes.length + ' 只券都不在当前品种/筛选范围内，暂不标注。</div>';
+  } else {
+    html += '<div class="stock-list">';
+    shown.forEach(function(b) {
+      html += '<span class="stock-item">' +
+        '<span class="si-code">' + b.code + '</span>' +
+        '<span class="si-meta">' +
+          (b.term != null ? Number(b.term).toFixed(2) + 'Y' : '') +
+          (b.yield != null ? ' / ' + Number(b.yield).toFixed(4) + '%' : '') +
+        '</span>' +
+        '<button class="si-del" title="移除" onclick="removeStockCode(\'' + b.code + '\')">×</button>' +
+        '</span>';
+    });
+    html += '</div>';
+  }
+  box.innerHTML = html;
+}
+
 // ==================== 收益率曲线 ====================
 const COLOR_MAP = { '国债': '#c23531', '国开': '#c23531', '地方': '#c23531', '存单': '#ba7517' };
 const BOND_LABEL_MAP = { '国债': '国债', '国开': '国开债', '地方': '地方债', '存单': '存单' };
@@ -1063,32 +1210,9 @@ function renderYieldCurve() {
   var filterType = document.getElementById('filter-bond-type').value;
   var filterRegion = document.getElementById('filter-region').value;
 
-  var bonds = (data.bonds || []).slice();
+  // 与库存名单共用同一套筛选口径
+  var bonds = getFilteredBonds(data.bonds || []);
   var hasFilter = (minTerm > 0 || maxTerm < Infinity || filterVat || filterNonVat || filterType || filterRegion);
-
-  if (hasFilter) {
-    bonds = bonds.filter(function(b) {
-      if (b.term < minTerm || b.term > maxTerm) return false;
-      // 免/不免税筛选：两个都勾=全部；只勾免税=只留免税；只勾不免税=只留不免税
-      var isFree = (b.vat_free === 0 || b.vat_free == null);  // 0=免税
-      if (filterVat && !filterNonVat && !isFree) return false;  // 只勾免税 → 剔除不免税
-      if (!filterVat && filterNonVat && isFree) return false;   // 只勾不免税 → 剔除免税
-      if (filterType && b.bond_type != null && b.bond_type !== filterType) return false;
-      if (filterRegion && b.region != null && b.region !== filterRegion) return false;
-      return true;
-    });
-    // 免、不免税都勾选：不免税券用 估值/1.03 参与拟合（调整yield）
-    if (filterVat && filterNonVat) {
-      bonds = bonds.map(function(b) {
-        var isFree = (b.vat_free === 0 || b.vat_free == null);
-        if (!isFree && b.yield != null) {
-          var adj = b.yield / 1.03;
-          return { code: b.code, term: b.term, yield: adj, vat_free: b.vat_free, deviation: b.deviation };
-        }
-        return b;
-      });
-    }
-  }
 
   var nssTerms, nssYields, extremes, useRefit = false, refitCurve = null;
 
@@ -1122,6 +1246,7 @@ function renderYieldCurve() {
   // 筛选后无个券：清空图表
   if (hasFilter && bonds.length === 0) {
     chart.setOption({ series: [] }, true);
+    renderStockPanel();
     return;
   }
 
@@ -1150,10 +1275,19 @@ function renderYieldCurve() {
     var highBonds = [];
     var lowBonds = [];
 
+    var stockSet = {};
+    window._stockCodes.forEach(function(c) { stockSet[c] = 1; });
+
     bonds.forEach(function(b) {
       var dev = b.deviation;
       if (useRefit && refitCurve) { dev = (b.yield - refitCurve(b.term) * 100) * 100; }
       var pt = { value: [b.term, b.yield], name: b.code, term: b.term, yield: b.yield, deviation: dev };
+      // 库存券：蓝色描边 + 稍大（填充色沿用所在分组；仅作标注，不参与 NSS 拟合）
+      if (stockSet[String(b.code).toUpperCase()]) {
+        pt.isStock = true;
+        pt.symbolSize = 9;
+        pt.itemStyle = { borderColor: '#2f7fd1', borderWidth: 2.5 };
+      }
       if (extremeHighSet.has(b.code)) {
         highBonds.push(pt);
       } else if (extremeLowSet.has(b.code)) {
@@ -1229,7 +1363,7 @@ function renderYieldCurve() {
       formatter: function(p) {
         if (p.seriesType === 'scatter' && p.data.name) {
           return [
-            '<b>' + p.data.name + '</b>',
+            '<b>' + p.data.name + '</b>' + (p.data.isStock ? ' <span style="color:#7ec8ff">★ 库存券</span>' : ''),
             '期限: ' + p.data.term.toFixed(2) + 'Y',
             '收益率: ' + p.data.yield.toFixed(4) + '%',
             '偏离度: ' + (p.data.deviation != null ? p.data.deviation.toFixed(1) + 'bp' : '--')
@@ -1269,8 +1403,9 @@ function renderYieldCurve() {
     series: series
   }, true);
 
-  // 同步更新骑乘收益图
+  // 同步更新骑乘收益图与库存名单
   renderCarryChart();
+  renderStockPanel();
 }
 
 // ==================== 骑乘收益柱形图 ====================
