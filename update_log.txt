@@ -1026,3 +1026,74 @@ after 21111 ms: Could not connect to server
 [2026-09-30 08:46:31]       Copied: bond_data.json
 [2026-09-30 08:46:31]       Copied: index.html
 [2026-09-30 08:46:31] [3/4] Git commit...
+[2026-09-30 08:46:33]       Committed
+[2026-09-30 08:46:33] [4/4] Pushing to GitHub Pages...
+[2026-09-30 08:46:36]       Commits ahead of origin/main: 1
+[2026-09-30 08:46:36]       Push attempt 1/5...
+[2026-09-30 08:46:58]       Push failed (exit 128): git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Failed to connect to github.com:443 
+after 21085 ms: Could not connect to server
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...nnect to server:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-09-30 08:46:58]       Retrying in 30 seconds...
+[2026-09-30 08:47:28]       Push attempt 2/5...
+[2026-09-30 08:47:57]       Push returned success but remote HEAD mismatch. Remote: git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Recv failure: Connection was reset
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...ction was reset:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-09-30 08:47:57]       Retrying in 60 seconds...
+[2026-09-30 08:48:57]       Push attempt 3/5...
+[2026-09-30 08:49:19]       Push failed (exit 128): git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Failed to connect to github.com:443 
+after 21124 ms: Could not connect to server
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...nnect to server:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-09-30 08:49:19]       Retrying in 120 seconds...
+[2026-09-30 08:51:19]       Push attempt 4/5...
+[2026-09-30 08:51:43]       Push returned success but remote HEAD mismatch. Remote: git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Failed to connect to github.com:443 
+after 21110 ms: Could not connect to server
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...nnect to server:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-09-30 08:51:43]       Retrying in 240 seconds...
+[2026-09-30 08:55:43]       Push attempt 5/5...
+[2026-09-30 08:55:48]       Pushed and verified (remote HEAD = dbd62de97675d4220dce48a43cf92d7739778d0f)
+[2026-09-30 08:55:48] ===== Daily update finished =====
+[2026-09-30 12:00:03] ===== Bond Panel daily update started (retry-only mode) =====
+[2026-09-30 12:00:04] [1/4] Skipped (retry-only mode).
+[2026-09-30 12:00:04] [2/4] Skipped (retry-only mode).
+[2026-09-30 12:00:04] [3/4] Skipped (retry-only mode).
+[2026-09-30 12:00:04] [4/4] Pushing to GitHub Pages...
+[2026-09-30 12:01:04]       [WARN] fetch failed (offline?): git.exe : error: RPC failed; curl 56 Recv failure: Connection was reset
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (error: RPC fail...ction was reset:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+fatal: expected flush after ref listing
+[2026-09-30 12:01:05]       Commits ahead of origin/main: 0
+[2026-09-30 12:01:05]       Remote is already up to date. Nothing to push.
+[2026-09-30 12:01:05] ===== Daily update finished =====
+[2026-10-08 12:28:16] ===== Bond Panel daily update started  =====
+[2026-10-08 12:28:16] [1/4] Generating data (with retry)...
+[2026-10-08 12:28:16]       Data attempt 1/2...
+[2026-10-08 12:28:16]       Running data_exporter.py...
+[2026-10-08 12:31:39]       Snapshot size: 1305.2 KB
+[2026-10-08 12:31:39]       Validation passed
+[2026-10-08 12:31:39]       Data OK
+[2026-10-08 12:31:39] [2/4] Copying files to deploy...
+[2026-10-08 12:31:39]       Copied: echarts.min.js
+[2026-10-08 12:31:39]       Copied: bond_snapshot.json
+[2026-10-08 12:31:39]       Copied: bond_history.json
+[2026-10-08 12:31:39]       Copied: bond_data.json
+[2026-10-08 12:31:39]       Copied: index.html
+[2026-10-08 12:31:39] [3/4] Git commit...
