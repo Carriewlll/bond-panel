@@ -1301,3 +1301,76 @@ fatal: expected flush after ref listing
 [2026-10-15 08:45:30]       Copied: bond_data.json
 [2026-10-15 08:45:30]       Copied: index.html
 [2026-10-15 08:45:30] [3/4] Git commit...
+[2026-10-15 08:45:31]       Committed
+[2026-10-15 08:45:31] [4/4] Pushing to GitHub Pages...
+[2026-10-15 08:45:54]       [WARN] fetch failed (offline?): git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Recv failure: Connection was reset
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...ction was reset:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-10-15 08:45:54]       Commits ahead of origin/main: 1
+[2026-10-15 08:45:54]       Push attempt 1/5...
+[2026-10-15 08:46:14]       Push failed (exit 128): git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Recv failure: Connection was reset
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...ction was reset:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-10-15 08:46:14]       Retrying in 30 seconds...
+[2026-10-15 08:46:44]       Push attempt 2/5...
+[2026-10-15 08:47:06]       Push failed (exit 128): git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Failed to connect to github.com:443 
+after 21133 ms: Could not connect to server
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...nnect to server:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-10-15 08:47:06]       Retrying in 60 seconds...
+[2026-10-15 08:48:06]       Push attempt 3/5...
+[2026-10-15 08:48:31]       Push failed (exit 128): git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Failed to connect to github.com:443 
+after 21319 ms: Could not connect to server
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...nnect to server:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-10-15 08:48:31]       Retrying in 120 seconds...
+[2026-10-15 08:50:31]       Push attempt 4/5...
+[2026-10-15 08:50:53]       Push failed (exit 128): git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Failed to connect to github.com:443 
+after 21100 ms: Could not connect to server
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...nnect to server:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-10-15 08:50:53]       Retrying in 240 seconds...
+[2026-10-15 08:54:53]       Push attempt 5/5...
+[2026-10-15 08:54:59]       Pushed and verified (remote HEAD = 1330d96846ffda14e013393dabc6535cfa783ca8)
+[2026-10-15 08:54:59] ===== Daily update finished =====
+[2026-10-15 12:00:05] ===== Bond Panel daily update started (retry-only mode) =====
+[2026-10-15 12:00:05] [1/4] Skipped (retry-only mode).
+[2026-10-15 12:00:05] [2/4] Skipped (retry-only mode).
+[2026-10-15 12:00:05] [3/4] Skipped (retry-only mode).
+[2026-10-15 12:00:05] [4/4] Pushing to GitHub Pages...
+[2026-10-15 12:00:41]       [WARN] fetch failed (offline?): git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Recv failure: Connection was reset
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...ction was reset:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-10-15 12:00:41]       Commits ahead of origin/main: 0
+[2026-10-15 12:00:41]       Remote is already up to date. Nothing to push.
+[2026-10-15 12:00:41] ===== Daily update finished =====
+[2026-10-16 08:45:03] ===== Bond Panel daily update started  =====
+[2026-10-16 08:45:04] [1/4] Generating data (with retry)...
+[2026-10-16 08:45:04]       Data attempt 1/2...
+[2026-10-16 08:45:04]       Running data_exporter.py...
+[2026-10-16 08:45:15]       Data OK
+[2026-10-16 08:45:15] [2/4] Copying files to deploy...
+[2026-10-16 08:45:15]       Copied: echarts.min.js
+[2026-10-16 08:45:15]       Copied: bond_snapshot.json
+[2026-10-16 08:45:15]       Copied: bond_history.json
+[2026-10-16 08:45:15]       Copied: bond_data.json
+[2026-10-16 08:45:15]       Copied: index.html
+[2026-10-16 08:45:15] [3/4] Git commit...
