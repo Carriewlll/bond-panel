@@ -1550,3 +1550,29 @@ after 21071 ms: Could not connect to server
 [2026-10-22 08:45:13]       Copied: bond_data.json
 [2026-10-22 08:45:13]       Copied: index.html
 [2026-10-22 08:45:13] [3/4] Git commit...
+[2026-10-22 08:45:14]       Committed
+[2026-10-22 08:45:14] [4/4] Pushing to GitHub Pages...
+[2026-10-22 08:45:17]       Commits ahead of origin/main: 1
+[2026-10-22 08:45:18]       Push attempt 1/5...
+[2026-10-22 08:45:25]       Pushed and verified (remote HEAD = 3a5c1c609afb587ce288cbe2088aee95b66ff5e8)
+[2026-10-22 08:45:25] ===== Daily update finished =====
+[2026-10-22 12:00:08] ===== Bond Panel daily update started (retry-only mode) =====
+[2026-10-22 12:00:08] [1/4] Skipped (retry-only mode).
+[2026-10-22 12:00:08] [2/4] Skipped (retry-only mode).
+[2026-10-22 12:00:08] [3/4] Skipped (retry-only mode).
+[2026-10-22 12:00:08] [4/4] Pushing to GitHub Pages...
+[2026-10-22 12:00:14]       Commits ahead of origin/main: 0
+[2026-10-22 12:00:14]       Remote is already up to date. Nothing to push.
+[2026-10-22 12:00:14] ===== Daily update finished =====
+[2026-10-23 08:45:06] ===== Bond Panel daily update started  =====
+[2026-10-23 08:45:06] [1/4] Generating data (with retry)...
+[2026-10-23 08:45:06]       Data attempt 1/2...
+[2026-10-23 08:45:06]       Running data_exporter.py...
+[2026-10-23 08:45:24]       Data OK
+[2026-10-23 08:45:24] [2/4] Copying files to deploy...
+[2026-10-23 08:45:24]       Copied: echarts.min.js
+[2026-10-23 08:45:24]       Copied: bond_snapshot.json
+[2026-10-23 08:45:24]       Copied: bond_history.json
+[2026-10-23 08:45:24]       Copied: bond_data.json
+[2026-10-23 08:45:24]       Copied: index.html
+[2026-10-23 08:45:24] [3/4] Git commit...
