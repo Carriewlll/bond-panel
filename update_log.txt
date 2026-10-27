@@ -1631,3 +1631,69 @@ after 21071 ms: Could not connect to server
 [2026-10-26 08:50:36]       Copied: bond_data.json
 [2026-10-26 08:50:36]       Copied: index.html
 [2026-10-26 08:50:36] [3/4] Git commit...
+[2026-10-26 08:50:39]       Committed
+[2026-10-26 08:50:39] [4/4] Pushing to GitHub Pages...
+[2026-10-26 08:51:41]       [WARN] fetch failed (offline?): git.exe : error: RPC failed; curl 56 Recv failure: Connection was reset
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (error: RPC fail...ction was reset:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+fatal: expected flush after ref listing
+[2026-10-26 08:51:42]       Commits ahead of origin/main: 1
+[2026-10-26 08:51:42]       Push attempt 1/5...
+[2026-10-26 08:52:27]       Push failed (exit 128): git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Failed to connect to github.com:443 
+after 23656 ms: Could not connect to server
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...nnect to server:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-10-26 08:52:27]       Retrying in 30 seconds...
+[2026-10-26 08:52:58]       Push attempt 2/5...
+[2026-10-26 08:53:30]       Push failed (exit 128): git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Failed to connect to github.com:443 
+after 21168 ms: Could not connect to server
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...nnect to server:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-10-26 08:53:30]       Retrying in 60 seconds...
+[2026-10-26 08:54:30]       Push attempt 3/5...
+[2026-10-26 08:54:57]       Push failed (exit 128): git.exe : fatal: unable to access 'https://github.com/Carriewlll/bond-panel.git/': Recv failure: Connection was reset
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: unable t...ction was reset:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-10-26 08:54:57]       Retrying in 120 seconds...
+[2026-10-26 08:56:58]       Push attempt 4/5...
+[2026-10-26 08:57:52]       Push failed (exit 128): git.exe : fatal: Authentication failed for 'https://github.com/Carriewlll/bond-panel.git/'
+所在位置 D:\固收量化\web_panel\deploy\update_github.ps1:51 字符: 19
++         $output = & git @GitArgs 2>&1
++                   ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: Authenti...ond-panel.git/':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+[2026-10-26 08:57:52]       Retrying in 240 seconds...
+[2026-10-26 12:00:09] ===== Bond Panel daily update started (retry-only mode) =====
+[2026-10-26 12:00:09] [1/4] Skipped (retry-only mode).
+[2026-10-26 12:00:09] [2/4] Skipped (retry-only mode).
+[2026-10-26 12:00:09] [3/4] Skipped (retry-only mode).
+[2026-10-26 12:00:09] [4/4] Pushing to GitHub Pages...
+[2026-10-26 12:00:18]       Commits ahead of origin/main: 1
+[2026-10-26 12:00:18]       Push attempt 1/5...
+[2026-10-26 12:00:33]       Pushed and verified (remote HEAD = d3117a37cc76738757cc871e0be912a3b29a293b)
+[2026-10-26 12:00:33] ===== Daily update finished =====
+[2026-10-27 08:45:26] ===== Bond Panel daily update started  =====
+[2026-10-27 08:45:26] [1/4] Generating data (with retry)...
+[2026-10-27 08:45:26]       Data attempt 1/2...
+[2026-10-27 08:45:26]       Running data_exporter.py...
+[2026-10-27 08:45:52]       Data OK
+[2026-10-27 08:45:53] [2/4] Copying files to deploy...
+[2026-10-27 08:45:53]       Copied: echarts.min.js
+[2026-10-27 08:45:54]       Copied: bond_snapshot.json
+[2026-10-27 08:45:54]       Copied: bond_history.json
+[2026-10-27 08:45:54]       Copied: bond_data.json
+[2026-10-27 08:45:54]       Copied: index.html
+[2026-10-27 08:45:54] [3/4] Git commit...
